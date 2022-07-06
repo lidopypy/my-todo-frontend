@@ -1,0 +1,16 @@
+.count-todo{
+  display: flex;
+  justify-content : space-between;
+  padding: 5px 10px;
+  width: 100%;
+ 
+}
+.count-checkBox{
+  margin-right: 1rem;
+}
+
+.count-todo-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

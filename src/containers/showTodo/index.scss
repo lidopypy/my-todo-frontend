@@ -1,0 +1,39 @@
+.show-todo{
+  display: flex;
+  padding: 5px 10px;
+  width: 100%;
+}
+.checkBox{
+  margin-right: 1rem;
+}
+
+.panel-title{
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 5px;
+}
+.show-collapse{
+  width: 100%;
+}
+
+.show-todo-panel{
+  display: flex;
+  flex-direction: row;
+
+}
+
+.ant-collapse-header{
+  display: flex;
+
+  width: 100%;
+}
+.ant-collapse-header-text{
+
+  width: 100%;
+}
+
+.panel{
+  width: 100%;
+}

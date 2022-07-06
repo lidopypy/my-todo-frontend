@@ -1,0 +1,15 @@
+.input-todo {
+  width: 100%;
+  padding: 5px 0rem;
+}
+
+.input-todo .ant-form-item {
+  margin-bottom: 10px !important;
+}
+
+.input-btn {
+  -ms-flex-item-align: end;
+      -ms-grid-row-align: end;
+      align-self: end;
+}
+/*# sourceMappingURL=index.css.map */

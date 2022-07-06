@@ -1,23 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+import InputTodo from "./containers/inputTodo";
+import ShowTodo from "./containers/showTodo";
+import CountTodo from "./containers/countTodo";
+import CountDoneTodo from "./containers/countDoneTodo";
+import ShowDoneTodo from "./containers/showDoneTodo";
+import "./App.css";
 
-function App() {
+function App(props) {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <div className="toDoCheck">
+        <InputTodo />
+        <ShowTodo />
+        <CountTodo />
+      </div>
+      <div className="doneToDoCheck">
+        <ShowDoneTodo />
+        <CountDoneTodo />
+      </div>
     </div>
   );
 }
