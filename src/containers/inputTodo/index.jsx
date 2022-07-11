@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Form, Input } from "antd";
 import "./index.css";
 import { nanoid } from "nanoid";
+import utils from "../../utils";
 import PropTypes from "prop-types";
 //引入action
 import { addTodo } from "../../redux/actions/todo";
@@ -28,10 +29,9 @@ const validateMessages = {
   },
 };
 
-const nowTime = new Date();
-const timestamp = `${nowTime.getFullYear()}/${nowTime.getMonth()}/${nowTime.getDate()}`;
-
 function InputTodo(props) {
+  const nowTime = new Date();
+  const timestamp = utils.timestampToTime(nowTime);
   const [form] = Form.useForm();
   const onFinish = (values) => {
     const newTodo = {

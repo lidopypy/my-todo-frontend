@@ -1,5 +1,6 @@
 import React from "react";
 import "./index.css";
+import utils from "../../utils";
 import { Checkbox, Collapse, Button } from "antd";
 //引入action
 import { updateTodo } from "../../redux/actions/todo";
@@ -7,8 +8,6 @@ import { updateTodo } from "../../redux/actions/todo";
 import { connect } from "react-redux";
 
 const { Panel } = Collapse;
-const nowTime = new Date();
-const timestamp = `${nowTime.getFullYear()}/${nowTime.getMonth()}/${nowTime.getDate()}`;
 
 function ShowTodo(props) {
   const handleChecked = (id) => {
@@ -24,6 +23,8 @@ function ShowTodo(props) {
   };
   const handleConfirmDone = (id) => {
     return () => {
+      const nowTime = new Date();
+      const timestamp = utils.timestampToTime(nowTime);
       const newTodos = props.todos.map((todo) => {
         if (id === todo.id && todo.check) {
           if (!window.confirm("確定完成？")) return;
