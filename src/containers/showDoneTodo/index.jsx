@@ -89,7 +89,11 @@ function ShowDoneTodo(props) {
                     <div className="show-todo-panel">
                       <Button
                         danger
-                        style={{ borderColor: "#31B404", color: "#31B404" }}
+                        style={{
+                          borderColor: "#31B404",
+                          color: "#31B404",
+                          marginRight: "5px",
+                        }}
                         onClick={handleRecovery(data.id)}
                       >
                         復原

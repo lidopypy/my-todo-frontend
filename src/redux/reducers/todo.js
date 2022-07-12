@@ -1,5 +1,5 @@
-import { ADD_TODO } from "../constant";
-import { UPDATE_TODO } from "../constant";
+import { ADD_TODO, UPDATE_TODO } from "../constant";
+// import { UPDATE_TODO } from "../constant";
 
 const initState = () => {
   const todos = JSON.parse(localStorage.getItem("todos"));

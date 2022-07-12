@@ -7,10 +7,15 @@ import { updateTodo } from "../../redux/actions/todo";
 import { connect } from "react-redux";
 
 function CountDoneTodo(props) {
+  const checkDeleteTodos = props.todos.filter((todo) => todo.checkDone);
+  const checkedDeleteDoneTodos = props.todos.filter((todo) => todo.confirmDone);
+
   const handleCheckedAllDoneTodo = (event) => {
     const checkDone = event.target.checked;
     const newTodos = props.todos.map((todo) => {
-      return { ...todo, checkDone };
+      if (todo.confirmDone) {
+        return { ...todo, checkDone };
+      } else return todo;
     });
     props.updateTodo(newTodos);
   };
@@ -26,8 +31,10 @@ function CountDoneTodo(props) {
   };
 
   const handleIndeterminate = () => {
-    const doneTodos = props.todos.filter((todo) => todo.checkDone);
-    if (doneTodos.length < props.todos.length && doneTodos.length !== 0) {
+    if (
+      checkDeleteTodos.length < checkedDeleteDoneTodos.length &&
+      checkDeleteTodos.length !== 0
+    ) {
       return true;
     } else {
       return false;
@@ -35,8 +42,10 @@ function CountDoneTodo(props) {
   };
 
   const handleCheckAll = () => {
-    const doneTodos = props.todos.filter((todo) => todo.checkDone);
-    if (doneTodos.length === props.todos.length && doneTodos.length !== 0) {
+    if (
+      checkDeleteTodos.length === checkedDeleteDoneTodos.length &&
+      checkDeleteTodos.length !== 0
+    ) {
       return true;
     } else {
       return false;
@@ -48,9 +57,6 @@ function CountDoneTodo(props) {
       return { display: "none" };
     } else return { display: "block" };
   };
-
-  const checkDeleteTodos = props.todos.filter((todo) => todo.checkDone);
-  const checkedDeleteDoneTodos = props.todos.filter((todo) => todo.confirmDone);
 
   return (
     <div className="count-todo">

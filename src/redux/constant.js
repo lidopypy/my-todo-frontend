@@ -1,9 +1,12 @@
 /*
  * 该文件用于定义action对象中type类型的常量值，便于管理
  * */
+
+//User
+export const USER_REGISTER = "user_register";
+export const USER_LOGIN = "user_login";
+export const USER_LOGOUT = "user_logout";
+
+//ToDo
 export const ADD_TODO = "add_todo";
 export const UPDATE_TODO = "update_todo";
-
-// export const INCREMENT = 'increment'
-// export const DECREMENT = 'decrement'
-// export const ADD_PERSON = "add_person"

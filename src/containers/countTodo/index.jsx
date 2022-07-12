@@ -1,15 +1,13 @@
 import React from "react";
 import { Checkbox, Button } from "antd";
 import "./index.css";
+import utils from "../../utils";
 //引入action
 import { updateTodo } from "../../redux/actions/todo";
 //引入connect用于连接UI组件与redux
 import { connect } from "react-redux";
 
 function CountTodo(props) {
-  const nowTime = new Date();
-  const timestamp = `${nowTime.getFullYear()}/${nowTime.getMonth()}/${nowTime.getDate()}`;
-
   const handleCheckedAllTodo = (event) => {
     const check = event.target.checked;
     const newTodos = props.todos.map((todo) => {
@@ -21,10 +19,12 @@ function CountTodo(props) {
   };
 
   const handleTurnDoneTodo = () => {
+    const nowTime = new Date();
+    const timestamp = utils.timestampToTime(nowTime);
     if (checkDoneTodos.length !== 0) {
       if (!window.confirm("確定完成？")) return;
       const newTodos = props.todos.map((todo) => {
-        if (todo.check === true) {
+        if (todo.check === true && todo.confirmDone === false) {
           return { ...todo, confirmDone: true, doneTime: timestamp };
         } else return todo;
       });

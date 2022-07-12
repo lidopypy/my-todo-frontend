@@ -28,7 +28,11 @@ function ShowTodo(props) {
       const newTodos = props.todos.map((todo) => {
         if (id === todo.id && todo.check) {
           if (!window.confirm("確定完成？")) return;
-          return { ...todo, confirmDone: true, doneTime: timestamp };
+          return {
+            ...todo,
+            confirmDone: true,
+            doneTime: timestamp,
+          };
         } else if (id === todo.id && !todo.check) {
           alert("請先勾選");
           return todo;
