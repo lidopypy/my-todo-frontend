@@ -69,7 +69,7 @@ function ShowDoneTodo(props) {
         console.log();
         if (confirmDone) {
           return (
-            <div key={id} className="show-done-todo">
+            <div key={id}>
               <Checkbox
                 checked={checkDone}
                 className="checkBox"

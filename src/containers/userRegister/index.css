@@ -1,0 +1,20 @@
+.registerModel .login-form {
+  max-width: 300px;
+}
+
+.registerModel .login-form-forgot {
+  float: right;
+}
+
+.registerModel .ant-col-rtl .login-form-forgot {
+  float: left;
+}
+
+.registerModel .login-form-button {
+  width: 100%;
+}
+
+.sign-up-with-google {
+  margin-bottom: 30px;
+}
+/*# sourceMappingURL=index.css.map */

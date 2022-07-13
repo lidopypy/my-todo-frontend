@@ -1,0 +1,20 @@
+.loginModel .login-form {
+  max-width: 300px;
+}
+
+.loginModel .login-form-forgot {
+  float: right;
+}
+
+.loginModel .ant-col-rtl .login-form-forgot {
+  float: left;
+}
+
+.loginModel .login-form-button {
+  width: 100%;
+}
+
+.user-login {
+  margin-right: 25px;
+}
+/*# sourceMappingURL=index.css.map */
