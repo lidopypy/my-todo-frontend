@@ -1,8 +1,11 @@
 import React from "react";
-import ReactDOM from "react-dom";
+// import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import App from "./App";
 import store from "./redux/store";
 import { Provider } from "react-redux";
+const container = document.getElementById("root");
+const root = createRoot(container);
 
 //use localStorage to store the state.
 // store.subscribe(
@@ -12,11 +15,11 @@ import { Provider } from "react-redux";
 //   localStorage.setItem("todos", JSON.stringify(store.getState()))
 // );
 
-ReactDOM.render(
+root.render(
   <React.StrictMode>
     <Provider store={store}>
       <App />
     </Provider>
-  </React.StrictMode>,
-  document.getElementById("root")
+  </React.StrictMode>
+  // document.getElementById("root")
 );

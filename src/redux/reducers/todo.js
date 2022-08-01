@@ -1,13 +1,15 @@
 import { ADD_TODO, UPDATE_TODO } from "../constant";
+
 // import { UPDATE_TODO } from "../constant";
 
-const initState = () => {
+function initState() {
   const todos = JSON.parse(localStorage.getItem("todos"));
   if (todos === null) {
     console.log(todos);
     return [];
   } else return todos;
-};
+}
+
 export default function todos(prevState = initState(), action) {
   const { type, data } = action;
   switch (type) {

@@ -1,6 +1,7 @@
 import UserLogin from "../userLogin";
 import UserRegister from "../userRegister";
 import UserLogout from "../userLogout";
+import ShowUserInfo from "../showUserInfo";
 import "./index.css";
 //引入action
 import { addTodo } from "../../redux/actions/todo";
@@ -34,6 +35,7 @@ function MyHeader(props) {
         />
         <div className="user-login-logout">
           {props.user && <UserLogout />}
+          {props.user && <ShowUserInfo />}
           {!props.user && <UserLogin />}
           {!props.user && <UserRegister />}
         </div>

@@ -13,7 +13,7 @@ function ShowDoneTodo(props) {
     return (event) => {
       const checkDone = event.target.checked;
       const newTodos = props.todos.map((todo) => {
-        if (id === todo.id) {
+        if (id === todo._id) {
           return { ...todo, checkDone };
         } else return todo;
       });
@@ -24,12 +24,12 @@ function ShowDoneTodo(props) {
     return () => {
       if (!window.confirm("確定刪除？")) return;
       const newTodos = props.todos.filter((todo) => {
-        if (id !== todo.id && !todo.checkDone) {
+        if (id !== todo._id && !todo.checkDone) {
           return todo;
-        } else if (id === todo.id && !todo.checkDone) {
+        } else if (id === todo._id && !todo.checkDone) {
           alert("請先勾選");
           return todo;
-        } else if (id !== todo.id && todo.checkDone) {
+        } else if (id !== todo._id && todo.checkDone) {
           return todo;
         }
       });
@@ -39,7 +39,7 @@ function ShowDoneTodo(props) {
   const handleRecovery = (id) => {
     return () => {
       const newTodos = props.todos.map((todo) => {
-        if (id === todo.id) {
+        if (id === todo._id) {
           if (!window.confirm("確定復原？")) return;
           return { ...todo, check: false, confirmDone: false, doneTime: null };
         } else return todo;
@@ -58,7 +58,7 @@ function ShowDoneTodo(props) {
     <div>
       {props.todos.map((data) => {
         const {
-          id,
+          _id,
           title,
           content,
           setTime,
@@ -69,12 +69,12 @@ function ShowDoneTodo(props) {
         console.log();
         if (confirmDone) {
           return (
-            <div key={id}>
+            <div key={_id}>
               <Checkbox
                 checked={checkDone}
                 className="checkBox"
-                onChange={handleChecked(data.id)}
-                key={id}
+                onChange={handleChecked(data._id)}
+                key={_id}
               ></Checkbox>
               <Collapse collapsible="header" className="show-collapse">
                 <Panel
@@ -84,7 +84,7 @@ function ShowDoneTodo(props) {
                       <div>{setTime}</div>
                     </div>
                   }
-                  key={id}
+                  key={_id}
                   extra={
                     <div className="show-todo-panel">
                       <Button
@@ -94,14 +94,14 @@ function ShowDoneTodo(props) {
                           color: "#31B404",
                           marginRight: "5px",
                         }}
-                        onClick={handleRecovery(data.id)}
+                        onClick={handleRecovery(data._id)}
                       >
                         復原
                       </Button>
                       <Button
                         danger
                         style={handleDeleteButtonStyle(data.checkDone)}
-                        onClick={handleDelete(data.id)}
+                        onClick={handleDelete(data._id)}
                       >
                         刪除
                       </Button>

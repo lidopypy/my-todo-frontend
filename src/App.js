@@ -25,18 +25,20 @@ function App() {
           <div
             className="site-layout-background"
             style={{
-              padding: 24,
+              padding: 5,
               minHeight: 380,
             }}
           >
-            <div className="toDoCheck">
-              <InputTodo />
-              <ShowTodo />
-              <CountTodo />
-            </div>
-            <div className="doneToDoCheck">
-              <ShowDoneTodo />
-              <CountDoneTodo />
+            <div className="show-my-todo">
+              <div className="toDoCheck">
+                <InputTodo />
+                <ShowTodo />
+                <CountTodo />
+              </div>
+              <div className="doneToDoCheck">
+                <ShowDoneTodo />
+                <CountDoneTodo />
+              </div>
             </div>
           </div>
         </Content>

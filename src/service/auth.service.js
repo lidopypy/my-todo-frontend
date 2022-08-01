@@ -5,9 +5,7 @@ class AuthService {
   login(email, password) {
     return axios.post(API_URL + "/login", { email, password });
   }
-  logout() {
-    localStorage.removeItem("user");
-  }
+
   register(username, email, password) {
     console.log("API_URL", API_URL);
     return axios.post(API_URL + "/register", {
@@ -16,8 +14,103 @@ class AuthService {
       password,
     });
   }
+
   getCurrentUser() {
     return JSON.parse(localStorage.getItem("user"));
+  }
+
+  web3Login(address, data, sig) {
+    return axios.post(API_URL + "/web3UserLogin", {
+      address,
+      data,
+      sig,
+    });
+  }
+
+  createTodo({
+    jwt,
+    title,
+    content,
+    userId,
+    googleUserId,
+    web3UserId,
+    check,
+    checkDone,
+    confirmDone,
+    setTime,
+    doneTime,
+  }) {
+    let request = {};
+    if (userId) {
+      request = {
+        jwt,
+        title,
+        content,
+        userId,
+        check,
+        checkDone,
+        confirmDone,
+        setTime,
+        doneTime,
+      };
+    } else if (googleUserId) {
+      request = {
+        jwt,
+        title,
+        content,
+        googleUserId,
+        check,
+        checkDone,
+        confirmDone,
+        setTime,
+        doneTime,
+      };
+    } else if (web3UserId) {
+      request = {
+        jwt,
+        title,
+        content,
+        web3UserId,
+        check,
+        checkDone,
+        confirmDone,
+        setTime,
+        doneTime,
+      };
+    }
+    console.log("request : ", request);
+    return axios.post(API_URL + "/updateTodo", request);
+  }
+
+  fetchTodo({ jwt, userType, _id }) {
+    const request = { jwt, userType, _id };
+    console.log("request : ", request);
+    return axios.post(API_URL + "/fetchTodo", request);
+  }
+
+  updateLocalTodos({ jwt, todos, userId, googleUserId, web3UserId }) {
+    let request = {};
+    if (userId) {
+      request = {
+        jwt,
+        todos,
+        userId,
+      };
+    } else if (googleUserId) {
+      request = {
+        jwt,
+        todos,
+        googleUserId,
+      };
+    } else if (web3UserId) {
+      request = {
+        jwt,
+        todos,
+        web3UserId,
+      };
+    }
+    console.log("request : ", request);
+    return axios.post(API_URL + "/updateLocalTodos", request);
   }
 }
 

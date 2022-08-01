@@ -20,4 +20,17 @@ module.exports = {
       date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
     return Y + M + D + h + m + s;
   },
+  addressAbbreviation(address) {
+    let fronAddr = "";
+    let endAddr = "";
+    for (let i = 0; i < address.length; i++) {
+      if (i < 5) {
+        fronAddr += address[i];
+      }
+      if (i > 37) {
+        endAddr += address[i];
+      }
+    }
+    return fronAddr + "..." + endAddr;
+  },
 };

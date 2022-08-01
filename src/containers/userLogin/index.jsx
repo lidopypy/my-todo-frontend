@@ -1,20 +1,27 @@
 import React, { useState } from "react";
+import ThirdPartyLogin from "../thirdPartyLogin";
 import { Button, Form, Input, Modal, Checkbox } from "antd";
 import { LockOutlined, MailOutlined } from "@ant-design/icons";
 
 import "./index.css";
 import AuthService from "../../service/auth.service";
-//引入action
+//import redux action
 import { userLogin } from "../../redux/actions/user";
-//引入connect用于连接UI组件与redux
+//import react redux UI, use "connect" UI to connect Redux store & react component.
 import { connect } from "react-redux";
 
-const CollectionCreateForm = ({ props, visible, onCreate, onCancel }) => {
+const CollectionCreateForm = ({
+  props,
+  visible,
+  onCreate,
+  onCancel,
+  setVisible,
+}) => {
   const onFinish = async (values) => {
     const { email, password } = values;
     try {
       const result = await AuthService.login(email, password);
-      await props.userLogin(result.data.user);
+      await props.userLogin(result.data);
       console.log("result: ", result);
       console.log("props.user: ", props.user);
     } catch (err) {
@@ -50,6 +57,7 @@ const CollectionCreateForm = ({ props, visible, onCreate, onCancel }) => {
         }}
         onFinish={onFinish}
       >
+        <ThirdPartyLogin setVisible={setVisible} props={props} />
         <Form.Item
           name="email"
           rules={[
@@ -128,13 +136,17 @@ function UserLogin(props) {
         onCancel={() => {
           setVisible(false);
         }}
+        setVisible={setVisible}
       />
     </div>
   );
 }
 
-//使用connect()()创建并暴露一个Count的容器组件
-//connect(mapStateToProps,mapDispatchToProps)(UIcomponent);
+/*
+React Redux UI
+Use connect()() creact & export a container component
+connect(mapStateToProps,mapDispatchToProps)(UIcomponent);
+*/
 export default connect((state) => state, {
   userLogin,
 })(UserLogin);

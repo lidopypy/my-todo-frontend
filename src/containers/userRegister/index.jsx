@@ -1,20 +1,22 @@
 import React, { useState } from "react";
+import ThirdPartyLogin from "../thirdPartyLogin";
 import { Button, Form, Input, Modal, Checkbox } from "antd";
-import {
-  LockOutlined,
-  UserOutlined,
-  MailOutlined,
-  GoogleOutlined,
-} from "@ant-design/icons";
+import { LockOutlined, UserOutlined, MailOutlined } from "@ant-design/icons";
 
 import "./index.css";
 import AuthService from "../../service/auth.service";
-//引入action
-import { addTodo } from "../../redux/actions/todo";
-//引入connect用于连接UI组件与redux
+//import redux action
+import { userLogin } from "../../redux/actions/user";
+//import react redux UI, use "connect" UI to connect Redux store & react component.
 import { connect } from "react-redux";
 
-const CollectionCreateForm = ({ visible, onCreate, onCancel }) => {
+const CollectionCreateForm = ({
+  props,
+  setVisible,
+  visible,
+  onCreate,
+  onCancel,
+}) => {
   const onFinish = async (values) => {
     const { username, email, password } = values;
     try {
@@ -25,8 +27,6 @@ const CollectionCreateForm = ({ visible, onCreate, onCancel }) => {
     }
   };
   const [form] = Form.useForm();
-
-  const handleSignUpWithGoogle = () => {};
 
   return (
     <Modal
@@ -56,15 +56,13 @@ const CollectionCreateForm = ({ visible, onCreate, onCancel }) => {
         }}
         onFinish={onFinish}
       >
-        <Button
-          // type="primary"
-          // htmlType="submit"
-          onClick={handleSignUpWithGoogle}
-          className="login-form-button sign-up-with-google"
-        >
-          <GoogleOutlined className="site-form-item-icon" />
-          Sign up with Google.
-        </Button>
+        <ThirdPartyLogin
+          props={props}
+          setVisible={setVisible}
+          visible={visible}
+          onCreate={onCreate}
+          onCancel={onCancel}
+        />
         <Form.Item
           name="username"
           rules={[
@@ -133,6 +131,7 @@ const CollectionCreateForm = ({ visible, onCreate, onCancel }) => {
   );
 };
 
+//React UI component.
 function UserRegister(props) {
   const [visible, setVisible] = useState(false);
 
@@ -151,18 +150,23 @@ function UserRegister(props) {
         SignUp
       </Button>
       <CollectionCreateForm
+        props={props}
         visible={visible}
         onCreate={onCreate}
         onCancel={() => {
           setVisible(false);
         }}
+        setVisible={setVisible}
       />
     </div>
   );
 }
 
-//使用connect()()创建并暴露一个Count的容器组件
-//connect(mapStateToProps,mapDispatchToProps)(UIcomponent);
+/*
+React Redux UI
+Use connect()() creact & export a container component
+connect(mapStateToProps,mapDispatchToProps)(UIcomponent);
+*/
 export default connect((state) => state, {
-  addTodo,
+  userLogin,
 })(UserRegister);
