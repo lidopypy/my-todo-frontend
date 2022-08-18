@@ -1,9 +1,9 @@
 import React from "react";
 import { Checkbox, Button } from "antd";
 import "./index.css";
-//引入action
+//import redux action
 import { updateTodo } from "../../redux/actions/todo";
-//引入connect用于连接UI组件与redux
+//import react redux UI, use "connect" UI to connect Redux store & react component.
 import { connect } from "react-redux";
 
 function CountDoneTodo(props) {
@@ -84,8 +84,11 @@ function CountDoneTodo(props) {
   );
 }
 
-//使用connect()()创建并暴露一个Count的容器组件
-//connect(mapStateToProps,mapDispatchToProps)(UIcomponent);
+/*
+React Redux UI
+Use connect()() creact & export a container component
+connect(mapStateToProps,mapDispatchToProps)(UIcomponent);
+*/
 export default connect((state) => state, {
   updateTodo,
 })(CountDoneTodo);

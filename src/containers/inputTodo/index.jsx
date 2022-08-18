@@ -137,8 +137,10 @@ function InputTodo(props) {
   );
 }
 
-//使用connect()()创建并暴露一个Count的容器组件
-//connect(mapStateToProps,mapDispatchToProps)(UIcomponent);
-export default connect((state) => state, {
+/*
+React Redux UI
+Use connect()() creact & export a container component
+connect(mapStateToProps,mapDispatchToProps)(UIcomponent);
+*/ export default connect((state) => state, {
   addTodo,
 })(InputTodo);

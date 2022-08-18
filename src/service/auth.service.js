@@ -84,7 +84,7 @@ class AuthService {
 
   fetchTodo({ jwt, userType, _id }) {
     const request = { jwt, userType, _id };
-    console.log("request : ", request);
+    console.log("fetch request : ", request);
     return axios.post(API_URL + "/fetchTodo", request);
   }
 
@@ -93,23 +93,23 @@ class AuthService {
     if (userId) {
       request = {
         jwt,
-        todos,
+        data: todos,
         userId,
       };
     } else if (googleUserId) {
       request = {
         jwt,
-        todos,
+        data: todos,
         googleUserId,
       };
     } else if (web3UserId) {
       request = {
         jwt,
-        todos,
+        data: todos,
         web3UserId,
       };
     }
-    console.log("request : ", request);
+    console.log("update request : ", request);
     return axios.post(API_URL + "/updateLocalTodos", request);
   }
 }

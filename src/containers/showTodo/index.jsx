@@ -15,6 +15,49 @@ function ShowTodo(props) {
   const [todos, setTodos] = useState(props.todos);
 
   useEffect(() => {
+    async function updateData() {
+      let googleUserId;
+      let userId;
+      let web3UserId;
+      switch (props.user.userType) {
+        case "googleUser":
+          googleUserId = props.user._id;
+          break;
+        case "normalUser":
+          userId = props.user._id;
+          break;
+        case "web3User":
+          web3UserId = props.user._id;
+          break;
+        default:
+          break;
+      }
+      const jwt = JSON.parse(localStorage.getItem("jwt"));
+      let request = {};
+      if (userId) {
+        request = {
+          jwt,
+          todos,
+          userId,
+        };
+      } else if (googleUserId) {
+        request = {
+          jwt,
+          todos,
+          googleUserId,
+        };
+      } else if (web3UserId) {
+        request = {
+          jwt,
+          todos,
+          web3UserId,
+        };
+      }
+      console.log("send request : ", request);
+      const updateData = await AuthService.updateLocalTodos(request);
+      console.log("updateData : ", updateData);
+    }
+    updateData();
     async function fetchData() {
       const fetchRequest = {
         userType: props.user.userType,
@@ -126,8 +169,11 @@ function ShowTodo(props) {
   );
 }
 
-//使用connect()()创建并暴露一个Count的容器组件
-//connect(mapStateToProps,mapDispatchToProps)(UIcomponent);
+/*
+React Redux UI
+Use connect()() creact & export a container component
+connect(mapStateToProps,mapDispatchToProps)(UIcomponent);
+*/
 export default connect((state) => state, {
   updateTodo,
 })(ShowTodo);
