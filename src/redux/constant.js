@@ -7,5 +7,5 @@ export const USER_LOGIN = "user_login";
 export const USER_LOGOUT = "user_logout";
 
 //ToDo
-export const ADD_TODO = "add_todo";
-export const UPDATE_TODO = "update_todo";
+export const ADD_TODO_STATE = "add_todo";
+export const UPDATE_TODO_STATE = "update_todo";

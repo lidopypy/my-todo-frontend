@@ -1,50 +1,78 @@
 import React from "react";
 import "./index.css";
 import { Checkbox, Collapse, Button } from "antd";
-//引入action
-import { updateTodo } from "../../redux/actions/todo";
-//引入connect用于连接UI组件与redux
-import { connect, ReactReduxContext } from "react-redux";
+//import redux action
+import { updateTodoState } from "../../redux/actions/todo";
+//import react redux UI, use "connect" UI to connect Redux store & react component.
+import { connect } from "react-redux";
+import todoService from "../../service/todo.service";
 
 const { Panel } = Collapse;
 
 function ShowDoneTodo(props) {
   const handleChecked = (id) => {
-    return (event) => {
+    return async (event) => {
       const checkDone = event.target.checked;
-      const newTodos = props.todos.map((todo) => {
-        if (id === todo._id) {
-          return { ...todo, checkDone };
-        } else return todo;
-      });
-      props.updateTodo(newTodos);
+      const newTodos = await Promise.all(
+        props.todos.map(async (todo) => {
+          if (id === todo._id) {
+            await todoService.updateTodo({
+              jwt: JSON.parse(localStorage.getItem("jwt")),
+              ...todo,
+              checkDone,
+            });
+            return { ...todo, checkDone };
+          } else return todo;
+        })
+      );
+      props.updateTodoState(newTodos);
     };
   };
   const handleDelete = (id) => {
-    return () => {
+    return async () => {
       if (!window.confirm("確定刪除？")) return;
       const newTodos = props.todos.filter((todo) => {
-        if (id !== todo._id && !todo.checkDone) {
-          return todo;
-        } else if (id === todo._id && !todo.checkDone) {
-          alert("請先勾選");
-          return todo;
-        } else if (id !== todo._id && todo.checkDone) {
-          return todo;
-        }
+        if (id !== todo._id) return todo;
+        // if (id !== todo._id && !todo.checkDone) {
+        //   return todo;
+        // } else if (id === todo._id && !todo.checkDone) {
+        //   alert("請先勾選");
+        //   return todo;
+        // } else if (id !== todo._id && todo.checkDone) {
+        //   return todo;
+        // }
       });
-      props.updateTodo(newTodos);
+      const result = await todoService.deleteTodo({
+        jwt: JSON.parse(localStorage.getItem("jwt")),
+        _id: id,
+      });
+      // console.log("result : ", result);
+      props.updateTodoState(newTodos);
     };
   };
   const handleRecovery = (id) => {
-    return () => {
-      const newTodos = props.todos.map((todo) => {
-        if (id === todo._id) {
-          if (!window.confirm("確定復原？")) return;
-          return { ...todo, check: false, confirmDone: false, doneTime: null };
-        } else return todo;
-      });
-      props.updateTodo(newTodos);
+    return async () => {
+      const newTodos = await Promise.all(
+        props.todos.map(async (todo) => {
+          if (id === todo._id) {
+            if (!window.confirm("確定復原？")) return todo;
+            await todoService.updateTodo({
+              jwt: JSON.parse(localStorage.getItem("jwt")),
+              ...todo,
+              check: false,
+              confirmDone: false,
+              doneTime: null,
+            });
+            return {
+              ...todo,
+              check: false,
+              confirmDone: false,
+              doneTime: null,
+            };
+          } else return todo;
+        })
+      );
+      props.updateTodoState(newTodos);
     };
   };
 
@@ -66,7 +94,6 @@ function ShowDoneTodo(props) {
           checkDone,
           confirmDone,
         } = data;
-        console.log();
         if (confirmDone) {
           return (
             <div key={_id}>
@@ -126,5 +153,5 @@ Use connect()() creact & export a container component
 connect(mapStateToProps,mapDispatchToProps)(UIcomponent);
 */
 export default connect((state) => state, {
-  updateTodo,
+  updateTodoState,
 })(ShowDoneTodo);

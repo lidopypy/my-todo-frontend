@@ -1,7 +1,7 @@
 import axios from "axios";
 const API_URL = require("../app.config").APIURL;
 
-class AuthService {
+class authService {
   login(email, password) {
     return axios.post(API_URL + "/login", { email, password });
   }
@@ -27,91 +27,55 @@ class AuthService {
     });
   }
 
-  createTodo({
+  updateTodo({
     jwt,
+    _id,
     title,
     content,
     userId,
-    googleUserId,
-    web3UserId,
     check,
     checkDone,
     confirmDone,
     setTime,
     doneTime,
   }) {
-    let request = {};
-    if (userId) {
-      request = {
-        jwt,
-        title,
-        content,
-        userId,
-        check,
-        checkDone,
-        confirmDone,
-        setTime,
-        doneTime,
-      };
-    } else if (googleUserId) {
-      request = {
-        jwt,
-        title,
-        content,
-        googleUserId,
-        check,
-        checkDone,
-        confirmDone,
-        setTime,
-        doneTime,
-      };
-    } else if (web3UserId) {
-      request = {
-        jwt,
-        title,
-        content,
-        web3UserId,
-        check,
-        checkDone,
-        confirmDone,
-        setTime,
-        doneTime,
-      };
-    }
+    let request = {
+      jwt,
+      _id,
+      title,
+      content,
+      userId,
+      check,
+      checkDone,
+      confirmDone,
+      setTime,
+      doneTime,
+    };
     console.log("request : ", request);
     return axios.post(API_URL + "/updateTodo", request);
   }
 
-  fetchTodo({ jwt, userType, _id }) {
-    const request = { jwt, userType, _id };
-    console.log("fetch request : ", request);
+  deleteTodo({ jwt, _id }) {
+    let request = { jwt, _id };
+    console.log("delete request : ", request);
+    return axios.post(API_URL + "/deleteTodo", request);
+  }
+
+  fetchTodo({ jwt, _id }) {
+    let request = { jwt, _id };
+    // console.log("fetch request : ", request);
     return axios.post(API_URL + "/fetchTodo", request);
   }
 
-  updateLocalTodos({ jwt, todos, userId, googleUserId, web3UserId }) {
-    let request = {};
-    if (userId) {
-      request = {
-        jwt,
-        data: todos,
-        userId,
-      };
-    } else if (googleUserId) {
-      request = {
-        jwt,
-        data: todos,
-        googleUserId,
-      };
-    } else if (web3UserId) {
-      request = {
-        jwt,
-        data: todos,
-        web3UserId,
-      };
-    }
+  updateLocalTodos({ jwt, todos, userId }) {
+    let request = {
+      jwt,
+      data: todos,
+      userId,
+    };
     console.log("update request : ", request);
     return axios.post(API_URL + "/updateLocalTodos", request);
   }
 }
 
-export default new AuthService();
+export default new authService();

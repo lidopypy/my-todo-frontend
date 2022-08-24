@@ -5,7 +5,7 @@ import { UserOutlined } from "@ant-design/icons";
 import { Avatar, Badge } from "antd";
 
 //引入action
-import { updateTodo } from "../../redux/actions/todo";
+import { updateTodoState } from "../../redux/actions/todo";
 //引入connect用于连接UI组件与redux
 import { connect } from "react-redux";
 

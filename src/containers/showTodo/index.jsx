@@ -2,118 +2,97 @@ import React, { useState, useEffect } from "react";
 import "./index.css";
 import utils from "../../utils";
 import { Checkbox, Collapse, Button } from "antd";
-//引入action
-import { updateTodo } from "../../redux/actions/todo";
-//引入connect用于连接UI组件与redux
+//import redux action
+import { updateTodoState } from "../../redux/actions/todo";
+//import react redux UI, use "connect" UI to connect Redux store & react component.
 import { connect } from "react-redux";
-import AuthService from "../../service/auth.service";
+import todoService from "../../service/todo.service";
 const { Panel } = Collapse;
 
 function ShowTodo(props) {
   const [user, setUser] = useState(props.user);
-  console.log("state user : ", user);
+  // console.log("state user : ", user);
   const [todos, setTodos] = useState(props.todos);
 
+  async function updateData() {
+    let userId = props.user._id;
+    let todos = props.todos;
+    const jwt = JSON.parse(localStorage.getItem("jwt"));
+    let request = {
+      jwt,
+      todos,
+      userId,
+    };
+    // console.log("send request : ", request);
+    await todoService.updateLocalTodos(request);
+  }
+
+  async function fetchData() {
+    const fetchRequest = {
+      _id: props.user._id,
+      jwt: JSON.parse(localStorage.getItem("jwt")),
+    };
+    // console.log("fetchRequest : ", fetchRequest);
+    const fetchData = await todoService.fetchTodo(fetchRequest);
+    // console.log("fetchData : ", fetchData);
+    props.updateTodoState(fetchData.data.todos);
+  }
+
   useEffect(() => {
-    async function updateData() {
-      let googleUserId;
-      let userId;
-      let web3UserId;
-      switch (props.user.userType) {
-        case "googleUser":
-          googleUserId = props.user._id;
-          break;
-        case "normalUser":
-          userId = props.user._id;
-          break;
-        case "web3User":
-          web3UserId = props.user._id;
-          break;
-        default:
-          break;
-      }
-      const jwt = JSON.parse(localStorage.getItem("jwt"));
-      let request = {};
-      if (userId) {
-        request = {
-          jwt,
-          todos,
-          userId,
-        };
-      } else if (googleUserId) {
-        request = {
-          jwt,
-          todos,
-          googleUserId,
-        };
-      } else if (web3UserId) {
-        request = {
-          jwt,
-          todos,
-          web3UserId,
-        };
-      }
-      console.log("send request : ", request);
-      const updateData = await AuthService.updateLocalTodos(request);
-      console.log("updateData : ", updateData);
-    }
-    updateData();
-    async function fetchData() {
-      const fetchRequest = {
-        userType: props.user.userType,
-        _id: props.user._id,
-        jwt: JSON.parse(localStorage.getItem("jwt")),
-      };
-      console.log("fetchRequest : ", fetchRequest);
-      const fetchData = await AuthService.fetchTodo(fetchRequest);
-      console.log("fetchData : ", fetchData);
-    }
-    if (props.user && props.user.userType === "googleUser") {
+    if (props.user) {
+      updateData();
       fetchData();
     }
-  }, [user]);
-  //googleUser Login, fetch todo from server.
-  // if (props.user.userType === "googleUser") {
-  //   console.log("props.user.userType");
-  //   // const fetchRequest = {
-  //   //   jwt: JSON.parse(localStorage.getItem("jwt")),
-  //   //   userType: props.user.userType,
-  //   //   _id: props.user._id,
-  //   // };
-  //   // console.log("fetchRequest : ", fetchRequest);
-  //   // const fetchTodo = await AuthService.fetchTodo(fetchRequest);
-  //   // console.log("fetchTodo : ", fetchTodo);
-  // }
+  }, [props.user]);
 
   const handleChecked = (_id) => {
-    return (event) => {
+    return async (event) => {
       const check = event.target.checked;
-      const newTodos = props.todos.map((todo) => {
-        if (_id === todo._id) {
-          return { ...todo, check };
-        } else return todo;
-      });
-      props.updateTodo(newTodos);
+      const newTodos = await Promise.all(
+        props.todos.map((todo) => {
+          if (_id === todo._id) {
+            todoService.updateTodo({
+              jwt: JSON.parse(localStorage.getItem("jwt")),
+              ...todo,
+              check,
+            });
+            return { ...todo, check };
+          } else return todo;
+        })
+      );
+      props.updateTodoState(newTodos);
+      setTodos(newTodos);
     };
   };
   const handleConfirmDone = (_id) => {
-    return () => {
+    return async () => {
       const nowTime = new Date();
       const timestamp = utils.timestampToTime(nowTime);
-      const newTodos = props.todos.map((todo) => {
-        if (_id === todo._id && todo.check) {
-          if (!window.confirm("確定完成？")) return;
-          return {
-            ...todo,
-            confirmDone: true,
-            doneTime: timestamp,
-          };
-        } else if (_id === todo._id && !todo.check) {
-          alert("請先勾選");
-          return todo;
-        } else return todo;
-      });
-      props.updateTodo(newTodos);
+      const newTodos = await Promise.all(
+        props.todos.map((todo) => {
+          if (_id === todo._id && todo.check) {
+            if (!window.confirm("確定完成？")) {
+              return todo;
+            } else {
+              todoService.updateTodo({
+                jwt: JSON.parse(localStorage.getItem("jwt")),
+                ...todo,
+                confirmDone: true,
+                doneTime: timestamp,
+              });
+              return {
+                ...todo,
+                confirmDone: true,
+                doneTime: timestamp,
+              };
+            }
+          } else if (_id === todo._id && !todo.check) {
+            alert("請先勾選");
+            return todo;
+          } else return todo;
+        })
+      );
+      props.updateTodoState(newTodos);
     };
   };
   const handleDoneButtonStyle = (check) => {
@@ -175,5 +154,5 @@ Use connect()() creact & export a container component
 connect(mapStateToProps,mapDispatchToProps)(UIcomponent);
 */
 export default connect((state) => state, {
-  updateTodo,
+  updateTodoState,
 })(ShowTodo);

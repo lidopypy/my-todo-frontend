@@ -5,7 +5,7 @@ import { Button, Alert } from "antd";
 import Icon from "@ant-design/icons";
 
 import "./index.css";
-import AuthService from "../../service/auth.service";
+import authService from "../../service/auth.service";
 //import redux action
 import { userLogin } from "../../redux/actions/user";
 //import react redux UI, use "connect" UI to connect Redux store & react component.
@@ -20,13 +20,13 @@ const MetamaskIcon = (props) => <Icon component={Metamask} {...props} />;
 
 //React UI component.
 function ThirdPartyLogin({ setVisible, props }) {
-  console.log("Thirdparty props : ", props);
+  // console.log("Thirdparty props : ", props);
   let [error, setError] = useState(null);
   // let [address, setAddress] = useState(null);
 
   const handleSignUpWithGoogle = async () => {
     await window.open("http://localhost:8080/google", "_self");
-    console.log("handleSignUpWithGoogle");
+    // console.log("handleSignUpWithGoogle");
   };
 
   const handleSignUpWithMetamask = async () => {
@@ -34,7 +34,7 @@ function ThirdPartyLogin({ setVisible, props }) {
       //connect to metamask.
       await ethereum.request({ method: "eth_requestAccounts" });
       const account = await ethereum.request({ method: "eth_accounts" });
-      console.log("accounts: ", account[0]);
+      // console.log("accounts: ", account[0]);
       //sign a message.
       var terms = Buffer(
         "SGkgdGhlcmUgZnJvbSBNeSBUb0RvIExpc3QgV2ViIEFwcCEgU2lnbiB0aGlzIG1lc3NhZ2UgdG8gcHJvdmUgeW91IGhhdmUgYWNjZXNzIHRvIHRoaXMgd2FsbGV0IGFuZCB3ZeKAmWxsIGxvZyB5b3UgaW4uIFRoaXMgd29u4oCZdCBjb3N0IHlvdSBhbnkgRXRoZXIu",
@@ -43,9 +43,9 @@ function ThirdPartyLogin({ setVisible, props }) {
       var text = terms;
       var data = ethUtil.bufferToHex(new Buffer.from(text, "utf8"));
       const address = account[0];
-      console.log("address: ", address);
+      // console.log("address: ", address);
       // var from = web3.eth.accounts[0];
-      console.log("CLICKED, SENDING PERSONAL SIGN REQ");
+      // console.log("CLICKED, SENDING PERSONAL SIGN REQUEST");
       var params = [data, address];
       var method = "personal_sign";
       await ethereum
@@ -54,13 +54,13 @@ function ThirdPartyLogin({ setVisible, props }) {
           params,
         })
         .then(async (sig) => {
-          const result = await AuthService.web3Login(address, data, sig);
+          const result = await authService.web3Login(address, data, sig);
           await props.userLogin(result.data);
         });
       setVisible(false);
       setError(null);
     } catch (error) {
-      console.log("error : ", error);
+      console.error("error : ", error);
       setError(error);
       // setAddress("");
     }

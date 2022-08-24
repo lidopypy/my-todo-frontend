@@ -4,7 +4,7 @@ import { Button, Form, Input, Modal, Checkbox } from "antd";
 import { LockOutlined, MailOutlined } from "@ant-design/icons";
 
 import "./index.css";
-import AuthService from "../../service/auth.service";
+import authService from "../../service/auth.service";
 //import redux action
 import { userLogin } from "../../redux/actions/user";
 //import react redux UI, use "connect" UI to connect Redux store & react component.
@@ -20,12 +20,12 @@ const CollectionCreateForm = ({
   const onFinish = async (values) => {
     const { email, password } = values;
     try {
-      const result = await AuthService.login(email, password);
+      const result = await authService.login(email, password);
       await props.userLogin(result.data);
-      console.log("result: ", result);
-      console.log("props.user: ", props.user);
+      // console.log("result: ", result);
+      // console.log("props.user: ", props.user);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
   const [form] = Form.useForm();
@@ -45,7 +45,7 @@ const CollectionCreateForm = ({
             onCreate(values);
           })
           .catch((info) => {
-            console.log("Validate Failed:", info);
+            console.error("Validate Failed:", info);
           });
       }}
     >
@@ -116,7 +116,7 @@ function UserLogin(props) {
   const [visible, setVisible] = useState(false);
 
   const onCreate = (values) => {
-    console.log("Received values of form: ", values);
+    // console.log("Received values of form: ", values);
     setVisible(false);
   };
   return (

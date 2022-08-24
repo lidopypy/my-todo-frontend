@@ -2,9 +2,10 @@ import React from "react";
 import { Checkbox, Button } from "antd";
 import "./index.css";
 //import redux action
-import { updateTodo } from "../../redux/actions/todo";
+import { updateTodoState } from "../../redux/actions/todo";
 //import react redux UI, use "connect" UI to connect Redux store & react component.
 import { connect } from "react-redux";
+import todoService from "../../service/todo.service";
 
 function CountDoneTodo(props) {
   const checkDeleteTodos = props.todos.filter((todo) => todo.checkDone);
@@ -17,17 +18,27 @@ function CountDoneTodo(props) {
         return { ...todo, checkDone };
       } else return todo;
     });
-    props.updateTodo(newTodos);
+    props.updateTodoState(newTodos);
   };
 
-  const handleDeleteDoneTodo = () => {
+  const handleDeleteDoneTodo = async () => {
     if (!window.confirm("確定刪除？")) return;
+    let deleteTodos = [];
     const newTodos = props.todos.filter((todo) => {
       if (todo.checkDone !== true) {
         return todo;
-      }
+      } else deleteTodos.push(todo._id);
     });
-    props.updateTodo(newTodos);
+    await Promise.all(
+      deleteTodos.map(async (_id) => {
+        const result = await todoService.deleteTodo({
+          jwt: JSON.parse(localStorage.getItem("jwt")),
+          _id,
+        });
+        // console.log("result : ", result);
+      })
+    );
+    props.updateTodoState(newTodos);
   };
 
   const handleIndeterminate = () => {
@@ -90,5 +101,5 @@ Use connect()() creact & export a container component
 connect(mapStateToProps,mapDispatchToProps)(UIcomponent);
 */
 export default connect((state) => state, {
-  updateTodo,
+  updateTodoState,
 })(CountDoneTodo);

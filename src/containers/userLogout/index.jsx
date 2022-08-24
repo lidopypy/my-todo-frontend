@@ -2,7 +2,7 @@ import { Button, Modal } from "antd";
 import React, { useState } from "react";
 
 import "./index.css";
-import AuthService from "../../service/auth.service";
+import authService from "../../service/auth.service";
 //引入action
 import { userLogout } from "../../redux/actions/user";
 //引入connect用于连接UI组件与redux
@@ -17,9 +17,9 @@ function UserLogout(props) {
   const handleOk = async () => {
     try {
       await props.userLogout();
-      console.log("props.user : ", props.user);
+      // console.log("props.user : ", props.user);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
 
     setIsModalVisible(false);

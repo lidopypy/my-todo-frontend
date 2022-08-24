@@ -12,7 +12,7 @@ const initState = () => {
   } else {
     const user = JSON.parse(localStorage.getItem("user"));
     if (user === null) {
-      console.log("user: ", user);
+      // console.log("user: ", user);
       return null;
     } else return user;
   }

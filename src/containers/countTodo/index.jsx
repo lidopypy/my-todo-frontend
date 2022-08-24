@@ -3,32 +3,48 @@ import { Checkbox, Button } from "antd";
 import "./index.css";
 import utils from "../../utils";
 //import redux action
-import { updateTodo } from "../../redux/actions/todo";
+import { updateTodoState } from "../../redux/actions/todo";
 //import react redux UI, use "connect" UI to connect Redux store & react component.
 import { connect } from "react-redux";
+import todoService from "../../service/todo.service";
 
 function CountTodo(props) {
-  const handleCheckedAllTodo = (event) => {
+  const handleCheckedAllTodo = async (event) => {
     const check = event.target.checked;
-    const newTodos = props.todos.map((todo) => {
-      if (!todo.confirmDone) {
-        return { ...todo, check };
-      } else return todo;
-    });
-    props.updateTodo(newTodos);
+    const newTodos = await Promise.all(
+      props.todos.map(async (todo) => {
+        if (!todo.confirmDone) {
+          todoService.updateTodo({
+            jwt: JSON.parse(localStorage.getItem("jwt")),
+            ...todo,
+            check,
+          });
+          return { ...todo, check };
+        } else return todo;
+      })
+    );
+    props.updateTodoState(newTodos);
   };
 
-  const handleTurnDoneTodo = () => {
+  const handleTurnDoneTodo = async () => {
     const nowTime = new Date();
     const timestamp = utils.timestampToTime(nowTime);
     if (checkDoneTodos.length !== 0) {
       if (!window.confirm("確定完成？")) return;
-      const newTodos = props.todos.map((todo) => {
-        if (todo.check === true && todo.confirmDone === false) {
-          return { ...todo, confirmDone: true, doneTime: timestamp };
-        } else return todo;
-      });
-      props.updateTodo(newTodos);
+      const newTodos = await Promise.all(
+        props.todos.map((todo) => {
+          if (todo.check === true && todo.confirmDone === false) {
+            todoService.updateTodo({
+              jwt: JSON.parse(localStorage.getItem("jwt")),
+              ...todo,
+              confirmDone: true,
+              doneTime: timestamp,
+            });
+            return { ...todo, confirmDone: true, doneTime: timestamp };
+          } else return todo;
+        })
+      );
+      props.updateTodoState(newTodos);
     } else {
       alert("請先勾選");
       return;
@@ -99,5 +115,5 @@ Use connect()() creact & export a container component
 connect(mapStateToProps,mapDispatchToProps)(UIcomponent);
 */
 export default connect((state) => state, {
-  updateTodo,
+  updateTodoState,
 })(CountTodo);
