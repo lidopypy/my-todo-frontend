@@ -10,6 +10,7 @@ import authService from "../../service/auth.service";
 import { userLogin } from "../../redux/actions/user";
 //import react redux UI, use "connect" UI to connect Redux store & react component.
 import { connect } from "react-redux";
+const API_URL = require("../app.config").APIURL;
 const { ethereum } = window;
 var ethUtil = require("ethereumjs-util");
 var sigUtil = require("eth-sig-util");
@@ -25,7 +26,7 @@ function ThirdPartyLogin({ setVisible, props }) {
   // let [address, setAddress] = useState(null);
 
   const handleSignUpWithGoogle = async () => {
-    await window.open("http://localhost:8080/google", "_self");
+    await window.open(API_URL + "/google", "_self");
     // console.log("handleSignUpWithGoogle");
   };
 
