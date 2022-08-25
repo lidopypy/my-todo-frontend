@@ -26,6 +26,7 @@
     "redux-thunk": "^2.4.1",
     "web-vitals": "^2.1.4"
   },
+  "proxy": "https://desolate-coast-61655.herokuapp.com",
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
