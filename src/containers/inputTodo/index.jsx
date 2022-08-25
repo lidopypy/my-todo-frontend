@@ -4,7 +4,6 @@ import "./index.css";
 import todoService from "../../service/todo.service";
 import { nanoid } from "nanoid";
 import utils from "../../utils";
-import PropTypes from "prop-types";
 //引入action
 import { addTodoState } from "../../redux/actions/todo";
 //引入connect用于连接UI组件与redux
@@ -31,14 +30,13 @@ const validateMessages = {
 };
 
 function InputTodo(props) {
-  const checkUserLogin = utils.checkUserLogin;
   // console.log("InputTodo(props) : ", props);
   const nowTime = new Date();
   const timestamp = utils.timestampToTime(nowTime);
   const [form] = Form.useForm();
   const onFinish = async (values) => {
     // console.log("InputTodo(props) : ", props);
-    if (!checkUserLogin(props.user)) {
+    if (!props.user) {
       const newTodo = {
         _id: nanoid(),
         title: values.todo.title,
